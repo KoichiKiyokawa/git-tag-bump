@@ -2,7 +2,7 @@ name: Bump tag version
 on:
   workflow_dispatch:
     inputs:
-      bump_type:
+      bump_level:
         description: patch (1.0.0 -> 1.0.1), minor (1.0.0 -> 1.1.0), major (1.0.0 -> 2.0.0)
         required: true
         type: choice
@@ -10,17 +10,21 @@ on:
           - patch
           - minor
           - major
+permissions: write-all
 jobs:
   bump:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: '0'
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.55.0
+      - name: Bump tag version
+        run: |
+          git checkout main
+          latest_tag=$(git describe --abbrev=0 --tags --match 'v*' | head -n 1)
+          new_tag="v$(npx semver $latest_tag --increment ${{ github.event.inputs.bump_level }})"
+          echo "[INFO] New version is $new_tag"
+          git tag $new_tag
+          git config user.name action
+          git config user.email action@users.noreply.github.com
+          git push origin $new_tag
+          gh release create $new_tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          DEFAULT_BRANCH: main
-          DEFAULT_BUMP: ${{ github.event.inputs.bump_type }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
