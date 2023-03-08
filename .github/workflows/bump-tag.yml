@@ -5,6 +5,11 @@ on:
       bump_type:
         description: major or minor or patch
         required: true
+        type: choice
+        options:
+          - patch (1.0.0 -> 1.0.1)
+          - minor (1.0.0 -> 1.1.0)
+          - major (1.0.0 -> 2.0.0)
 jobs:
   bump:
     runs-on: ubuntu-22.04
