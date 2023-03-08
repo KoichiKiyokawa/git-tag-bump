@@ -10,6 +10,7 @@ on:
           - patch
           - minor
           - major
+permissions: write-all
 jobs:
   bump:
     runs-on: ubuntu-22.04
@@ -21,8 +22,8 @@ jobs:
         run: |
           git checkout main
           latest_tag=$(git describe --abbrev=0 --tags --match 'v*' | head -n 1)
-          new_tag=$(npx semver $latest_tag --increment ${{ github.event.inputs.bump_level }})
-          echo $new_tag
+          new_tag="v$(npx semver $latest_tag --increment ${{ github.event.inputs.bump_level }})"
+          echo "[INFO] New version is $new_tag"
           git tag $new_tag
           git config user.name action
           git config user.email action@users.noreply.github.com
