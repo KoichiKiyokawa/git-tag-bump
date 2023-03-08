@@ -1,0 +1,21 @@
+name: Node.js CI
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: major or minor or patch
+        required: true
+jobs:
+  bump:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.55.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BRANCH: main
+          DEFAULT_BUMP: ${{ github.event.inputs.bump_type }}
