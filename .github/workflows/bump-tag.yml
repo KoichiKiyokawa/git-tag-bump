@@ -3,13 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       bump_type:
-        description: major or minor or patch
+        description: patch (1.0.0 -> 1.0.1), minor (1.0.0 -> 1.1.0), major (1.0.0 -> 2.0.0)
         required: true
         type: choice
         options:
-          - patch (1.0.0 -> 1.0.1)
-          - minor (1.0.0 -> 1.1.0)
-          - major (1.0.0 -> 2.0.0)
+          - patch
+          - minor
+          - major
 jobs:
   bump:
     runs-on: ubuntu-22.04
