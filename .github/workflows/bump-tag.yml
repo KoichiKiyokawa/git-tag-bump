@@ -29,3 +29,5 @@ jobs:
           git config user.email action@users.noreply.github.com
           git push origin $new_tag
           gh release create $new_tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
