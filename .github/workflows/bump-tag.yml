@@ -21,13 +21,6 @@ jobs:
           ref: main
       - name: Bump tag version
         run: |
-          latest_tag=$(git describe --abbrev=0 --tags --match 'v*' | head -n 1)
-          new_tag="v$(npx semver $latest_tag --increment ${{ github.event.inputs.bump_level }})"
-          echo "[INFO] New version is $new_tag"
-          git tag $new_tag
-          git config user.name action
-          git config user.email action@users.noreply.github.com
-          git push origin $new_tag
-          gh release create $new_tag
+          sh scripts/bump.sh ${{ github.event.inputs.bump_level }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
