@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 set -e
 
@@ -23,7 +23,7 @@ function bump() {
   echo "v$major.$minor.$patch"
 }
 
-latest_tag=$(gh release list --limit 1 | | awk '{print $1}')
+latest_tag=$(gh release list --limit 1 | awk '{print $1}')
 new_tag="$(bump $latest_tag ${1:-patch})"
 echo "[INFO] New version is $new_tag"
 # git config user.name action
